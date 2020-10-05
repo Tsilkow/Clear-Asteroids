@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -9,7 +10,7 @@
 
 struct AsteroidSettings
 {
-    float m_density;
+    float m_invDensity; // inverse of density
     std::vector<float> m_velocityRange;
     std::vector<int> m_massRange;
     std::vector<float> m_angVelocityRange; //angular velocity
@@ -18,22 +19,27 @@ struct AsteroidSettings
     float m_amplitude;
     int m_peakFrequency;
     int m_peakVariation;
-    int m_peakAmplitude;
+    float m_peakAmplitude;
 };
 
-void generateShape(std::vector<Vertex> result, const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf::Color color);
+// generation of smooth and semi-random change of heights between two set points
+void connectPeaks(std::vector<float>& result, int begin, int end, float amplitude, int loop);
+
+// generation of wrapping landscape of heigts
+std::vector<float> generateHeights(int TOSegments, float amplitude, int peakFrequency, int peakVariation, float peakAmplitude);
 
 class Asteroid
 {
     private:
-    std::shared_ptr<AsteroidSettings> m_aSetts;
     int m_mass;
     sf::Color m_color;
     sf::Vector2f m_position;
     float m_angle;
     sf::Vector2f m_velocity;
     float m_angVelocity;
+    sf::Vector2f m_force;
 
+    int m_radius;
     std::vector<sf::Vertex> m_staRepres; // static representation
     std::vector<sf::Vertex> m_dynRepres; // dynamic representation
     

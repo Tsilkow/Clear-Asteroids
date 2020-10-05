@@ -1,0 +1,18 @@
+#pragma once
+
+#include <iostream>
+#include <vector>
+#include "asteroids.hpp"
+
+class Controller
+{
+    private:
+    std::vector<Asteroid> m_asteroids;
+
+    void createAsteroid();
+    
+    public:
+    Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts);
+
+    void tick(int ticksPassed);
+}
