@@ -11,16 +11,16 @@
 struct AsteroidSettings
 {
     float m_invDensity; // inverse of density
-    std::vector<float> m_velocityRange;
-    std::vector<int> m_massRange;
-    std::vector<float> m_angVelocityRange; //angular velocity
     int TOSegments;
-    std::vector<float> m_colorLightRange;
     float m_amplitude;
     int m_peakFrequency;
     int m_peakVariation;
     float m_peakAmplitude;
 };
+
+float radToDeg(float radians);
+
+float normalizeAngle(float angle);
 
 // generation of smooth and semi-random change of heights between two set points
 void connectPeaks(std::vector<float>& result, int begin, int end, float amplitude, int loop);

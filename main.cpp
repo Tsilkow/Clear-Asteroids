@@ -7,7 +7,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-#include "asteroids.hpp"
+#include "controller.hpp"
 
 
 using namespace std;
@@ -19,32 +19,42 @@ int main()
     AsteroidSettings aSetts =
     {
 	1.f,
-	{10.f, 20.f},
-	{100, 1000},
-	{-M_PI/3, M_PI/3},
-	16,
-	{0.5f, 0.8f},
+	32,
 	0.1f,
 	4,
 	1,
 	0.3f
     };
 
+    ControllerSettings cSetts =
+    {
+	{2.f, 4.f},
+	{1000, 10000},
+	{-M_PI/60, M_PI/60},
+	{0.7f, 0.8f},
+	800,
+	800,
+	50,
+	60,
+	0.5f
+    };
+
     shared_ptr<AsteroidSettings> shr_aSetts = make_shared<AsteroidSettings>(aSetts);
+    shared_ptr<ControllerSettings> shr_cSetts = make_shared<ControllerSettings>(cSetts);
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "Clear Asteroids");
     window.setFramerateLimit(60);
     
     cout << "I saw red venting" << endl;
 
-    vector<Asteroid> asteroids;
+    Controller controller(shr_aSetts, shr_cSetts);
 
-    
-    
-    asteroids.emplace_back(shr_aSetts, 2000, sf::Color(255, 128, 0), sf::Vector2f(0.f, 0.f), sf::Vector2f(1.f, 1.f), (float)M_PI/15.f);
+    sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
+    window.setView(actionView);
 
     enum GameState{Menu, Play, Scores};
     GameState currState = Play;
+    int ticksPassed = 0;
 
     while(window.isOpen())
     {
@@ -86,21 +96,14 @@ int main()
 
 		if(hasFocus)
 		{
-		    for(int i = 0; i < asteroids.size(); ++i)
-		    {
-			asteroids[i].tick();
-		    }
+		    controller.tick(ticksPassed);
 		}
 		else
 		{
 		    ;
 		}
-		
-		for(int i = 0; i < asteroids.size(); ++i)
-		{
-		    asteroids[i].draw(window);
-		}
-		
+		controller.draw(window);
+		++ticksPassed;
 		break;
 	    case GameState::Scores:
 		break;

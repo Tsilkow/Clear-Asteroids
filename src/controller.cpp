@@ -2,6 +2,7 @@
 
 
 #include "randoms.hpp"
+#include <math.h>
 
 
 float determineLightness(sf::Color input)
@@ -26,17 +27,59 @@ sf::Color randomColor(std::vector<float> lightRange)
 }
 
 Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts):
-    m_aSetts(aSetts), m_cSetts(cSetts)
+    m_aSetts(aSetts), m_cSetts(cSetts), m_lastAstCreated(0)
 {
     ;
 }
 
 void Controller::createAsteroid()
 {
-    /*
+    int side = randomI(0, 3); // 0 - north, 1 - east, 2 - south, 3 - west
+    sf::Vector2f start(0.f, 0.f);
+    float angle = normalizeAngle(randomF(M_PI, 2*M_PI) - side * M_PI/2.f);
+
+    if(side % 2 == 0)
+    {
+	start.x = randomI(-(m_cSetts->m_areaWidth/2 + m_cSetts->m_buffer),
+			    m_cSetts->m_areaWidth/2 + m_cSetts->m_buffer);
+	start.y = (side/2 *2 - 1) * (m_cSetts->m_areaHeight/2 + m_cSetts->m_buffer);
+    }
+    else
+    {
+	start.x = (side/2 *2 - 1) * (m_cSetts->m_areaWidth/2 + m_cSetts->m_buffer);
+	start.y = randomI(-(m_cSetts->m_areaHeight/2 + m_cSetts->m_buffer),
+			    m_cSetts->m_areaHeight/2 + m_cSetts->m_buffer);
+    }
+    std::cout << side << ": (" << start.x << ", " << start.y << "|" << angle << ")" << std::endl;
+    
     m_asteroids.emplace_back(m_aSetts,
-			     randomI(m_aSetts->m_massRange[0], m_aSetts->m_massRange[1]),
-			     randomColor(m_aSetts->m_colorLightRange),
-			     );
-    */
+			     randomI(m_cSetts->m_massRange[0], m_cSetts->m_massRange[1]),
+			     randomColor(m_cSetts->m_colorLightRange),
+			     start,
+			     sf::Vector2f(-cos(angle), -sin(angle)) *
+			     randomF(m_cSetts->m_velocityRange[0], m_cSetts->m_velocityRange[1]),
+			     randomF(m_cSetts->m_angVelocityRange[0], m_cSetts->m_angVelocityRange[1])
+			    );
+}
+
+void Controller::tick(int ticksPassed)
+{
+    if(ticksPassed - m_lastAstCreated >= m_cSetts->m_period)
+    {
+	createAsteroid();
+	m_lastAstCreated = ticksPassed;
+    }
+    
+    for(int i = 0; i < m_asteroids.size(); ++i)
+    {
+	m_asteroids[i].tick();
+    }
+}
+
+void Controller::draw(sf::RenderTarget& target)
+{
+    for(int i = 0; i < m_asteroids.size(); ++i)
+    {
+	m_asteroids[i].draw(target);
+    }
 }
