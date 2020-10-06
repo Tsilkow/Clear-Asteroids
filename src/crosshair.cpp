@@ -66,7 +66,7 @@ bool Crosshair::shoot(int ticksPassed)
 {
     if(ticksPassed - m_lastShot >= m_crSetts->m_cooldown)
     {
-	std::cout << "(" << m_position.x << " " << m_position.y << ")" << std::endl;
+	//std::cout << "(" << m_position.x << " " << m_position.y << ")" << std::endl;
 	m_lastShot = ticksPassed;
 	return true;
     }

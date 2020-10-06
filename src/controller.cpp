@@ -101,7 +101,7 @@ int Controller::destroyAt(sf::Vector2f target)
     {
 	if(distance(m_asteroids[i].getPosition(), target) <= m_asteroids[i].getRadius())
 	{
-	    std::cout << "GOT 'IM" << i << std::endl;
+	    //std::cout << "GOT 'IM" << i << std::endl;
 	    toRemove.push_back(i);
 	    ++kills;
 	}

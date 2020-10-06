@@ -66,6 +66,7 @@ int main()
 
     enum GameState{Menu, Play, Scores};
     GameState currState = Play;
+    bool hasFocus = true;
     int ticksPassed = 0;
     int shotCount = 0;
     int killCount = 0;
@@ -73,7 +74,6 @@ int main()
     while(window.isOpen())
     {
 	sf::Event event;
-	bool hasFocus = true;
 	
 	window.clear();
 	switch(currState)
@@ -90,9 +90,11 @@ int main()
 			    break;
 			case sf::Event::LostFocus:
 			    hasFocus = false;
+			    //std::cout << "LOST FOCUS" << std::endl;
 			    break;
 			case sf::Event::GainedFocus:
 			    hasFocus = true;
+			    //std::cout << "GAINED FOCUS" << std::endl;
 			    break;
 			case sf::Event::KeyPressed:
 			    if(hasFocus)
@@ -118,6 +120,7 @@ int main()
 			++shotCount;
 			killCount += controller.destroyAt(crosshair.getPosition());
 		    }
+		    ++ticksPassed;
 		}
 		else
 		{
@@ -125,7 +128,6 @@ int main()
 		}
 		controller.draw(window);
 		crosshair.draw(window);
-		++ticksPassed;
 		break;
 	    case GameState::Scores:
 		break;

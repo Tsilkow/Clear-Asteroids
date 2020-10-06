@@ -42,6 +42,7 @@ class Asteroid
     int m_radius;
     std::vector<sf::Vertex> m_staRepres; // static representation
     std::vector<sf::Vertex> m_dynRepres; // dynamic representation
+    sf::CircleShape m_collisionMask;
     
     public:
     Asteroid(const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf::Color color, sf::Vector2f position, sf::Vector2f velocity, float angVelocity);

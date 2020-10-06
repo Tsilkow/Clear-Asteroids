@@ -85,6 +85,8 @@ Asteroid::Asteroid(const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf:
     {
 	m_dynRepres.emplace_back(m_staRepres[i].position + m_position, m_staRepres[i].color);
     }
+    //m_collisionMask.setRadius(m_radius);
+    //m_collisionMask.setPosition(m_position);
 }
 
 bool Asteroid::tick(sf::FloatRect bounds)
@@ -101,6 +103,8 @@ bool Asteroid::tick(sf::FloatRect bounds)
     {
 	m_dynRepres[i].position = R.transformPoint(m_staRepres[i].position) + m_position;
     }
+    
+    //m_collisionMask.setPosition(m_position - sf::Vector2f(1.f, 1.f) * (float)m_radius);
 
     return bounds.contains(m_position.x, m_position.y);
 }
@@ -108,4 +112,5 @@ bool Asteroid::tick(sf::FloatRect bounds)
 void Asteroid::draw(sf::RenderTarget& target)
 {
     target.draw(&m_dynRepres[0], m_dynRepres.size(), sf::TriangleFan);
+    //target.draw(m_collisionMask);
 }
