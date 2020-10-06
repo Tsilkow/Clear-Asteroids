@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "asteroid.hpp"
+#include "crosshair.hpp"
 
 
 struct ControllerSettings
@@ -35,6 +36,8 @@ class Controller
     Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts);
 
     void tick(int ticksPassed);
+
+    int destroyAt(sf::Vector2f target);
     
     void draw(sf::RenderTarget& target);
 };

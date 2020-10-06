@@ -49,4 +49,7 @@ class Asteroid
     void tick();
 
     void draw(sf::RenderTarget& target);
+
+    const sf::Vector2f getPosition() {return m_position; }
+    const int getRadius() {return m_radius; }
 };

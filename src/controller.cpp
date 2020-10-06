@@ -77,6 +77,28 @@ void Controller::tick(int ticksPassed)
     }
 }
 
+int Controller::destroyAt(sf::Vector2f target)
+{
+    int kills = 0;
+    std::vector<int> toRemove;
+    
+    for(int i = 0; i < m_asteroids.size(); ++i)
+    {
+	if(distance(m_asteroids[i].getPosition(), target) <= m_asteroids[i].getRadius())
+	{
+	    toRemove.push_back(i);
+	    ++kills;
+	}
+    }
+
+    for(int i = toRemove.size()-1; i >= 0; --i)
+    {
+	m_asteroids.erase(m_asteroids.begin() + i);
+    }
+    
+    return kills;
+}
+
 void Controller::draw(sf::RenderTarget& target)
 {
     for(int i = 0; i < m_asteroids.size(); ++i)

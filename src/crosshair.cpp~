@@ -1,0 +1,15 @@
+#include "crosshair.hpp"
+
+
+Crosshair::Crosshair(std::shared_ptr<CrosshairSettings>& crSetts):
+    m_cooldown(crSetts->m_cooldown),
+    m_maneuverability(crSetts->m_maneuverability),
+    m_position(0.f, 0.f),
+    m_lastShot(0),
+    m_color(crSetts->m_color)
+{
+    for(int i = 0; i < crSetts->m_shape.size(); ++i)
+    {
+	m_staRepres.emplace_back(crSetts->m_shape[i], m_color);
+    }
+}
