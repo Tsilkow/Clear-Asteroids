@@ -40,8 +40,6 @@ Crosshair::Crosshair(std::shared_ptr<CrosshairSettings>& crSetts):
 
 void Crosshair::tick(int ticksPassed, sf::Vector2f mouse)
 {
-    std::cout << "(" << mouse.x << " " << mouse.y << ") = " << distance(mouse, m_position) << std::endl;
-    
     if(distance(mouse, m_position) <= (float)m_crSetts->m_maneuverability)
     {
 	m_position = mouse;
@@ -68,6 +66,7 @@ bool Crosshair::shoot(int ticksPassed)
 {
     if(ticksPassed - m_lastShot >= m_crSetts->m_cooldown)
     {
+	std::cout << "(" << m_position.x << " " << m_position.y << ")" << std::endl;
 	m_lastShot = ticksPassed;
 	return true;
     }

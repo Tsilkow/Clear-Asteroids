@@ -29,7 +29,10 @@ sf::Color randomColor(std::vector<float> lightRange)
 Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts):
     m_aSetts(aSetts), m_cSetts(cSetts), m_lastAstCreated(0)
 {
-    ;
+    m_bounds = sf::FloatRect(-(m_cSetts->m_areaWidth /2 +   m_cSetts->m_buffer),
+			     -(m_cSetts->m_areaHeight/2 +   m_cSetts->m_buffer),
+			       m_cSetts->m_areaWidth    + 2*m_cSetts->m_buffer,
+			       m_cSetts->m_areaWidth    + 2*m_cSetts->m_buffer);
 }
 
 void Controller::createAsteroid()
@@ -63,8 +66,10 @@ void Controller::createAsteroid()
 			    );
 }
 
-void Controller::tick(int ticksPassed)
+int Controller::tick(int ticksPassed)
 {
+    std::vector<int> toRemove;
+    
     if(ticksPassed - m_lastAstCreated >= m_cSetts->m_period)
     {
 	createAsteroid();
@@ -73,8 +78,18 @@ void Controller::tick(int ticksPassed)
     
     for(int i = 0; i < m_asteroids.size(); ++i)
     {
-	m_asteroids[i].tick();
+	if(!m_asteroids[i].tick(m_bounds))
+	{
+	    toRemove.push_back(i);
+	}
     }
+
+    for(int i = toRemove.size()-1; i >= 0; --i)
+    {
+	m_asteroids.erase(m_asteroids.begin() + toRemove[i]);
+    }
+
+    return m_asteroids.size();
 }
 
 int Controller::destroyAt(sf::Vector2f target)
@@ -86,6 +101,7 @@ int Controller::destroyAt(sf::Vector2f target)
     {
 	if(distance(m_asteroids[i].getPosition(), target) <= m_asteroids[i].getRadius())
 	{
+	    std::cout << "GOT 'IM" << i << std::endl;
 	    toRemove.push_back(i);
 	    ++kills;
 	}
@@ -93,7 +109,7 @@ int Controller::destroyAt(sf::Vector2f target)
 
     for(int i = toRemove.size()-1; i >= 0; --i)
     {
-	m_asteroids.erase(m_asteroids.begin() + i);
+	m_asteroids.erase(m_asteroids.begin() + toRemove[i]);
     }
     
     return kills;

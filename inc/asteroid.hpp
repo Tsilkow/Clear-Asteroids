@@ -46,7 +46,7 @@ class Asteroid
     public:
     Asteroid(const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf::Color color, sf::Vector2f position, sf::Vector2f velocity, float angVelocity);
 
-    void tick();
+    bool tick(sf::FloatRect bounds);
 
     void draw(sf::RenderTarget& target);
 

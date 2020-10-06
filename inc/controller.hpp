@@ -29,13 +29,14 @@ class Controller
     std::shared_ptr<AsteroidSettings> m_aSetts;
     std::shared_ptr<ControllerSettings> m_cSetts;
     int m_lastAstCreated; // tick when last asteroid was created
+    sf::FloatRect m_bounds;
 
     void createAsteroid();
     
     public:
     Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts);
 
-    void tick(int ticksPassed);
+    int tick(int ticksPassed);
 
     int destroyAt(sf::Vector2f target);
     

@@ -87,7 +87,7 @@ Asteroid::Asteroid(const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf:
     }
 }
 
-void Asteroid::tick()
+bool Asteroid::tick(sf::FloatRect bounds)
 {
     m_velocity += m_force * 1.f/(float)m_mass;
     m_force = sf::Vector2f(0.f, 0.f);
@@ -101,6 +101,8 @@ void Asteroid::tick()
     {
 	m_dynRepres[i].position = R.transformPoint(m_staRepres[i].position) + m_position;
     }
+
+    return bounds.contains(m_position.x, m_position.y);
 }
 
 void Asteroid::draw(sf::RenderTarget& target)
