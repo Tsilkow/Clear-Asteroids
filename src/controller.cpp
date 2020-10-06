@@ -50,7 +50,8 @@ void Controller::createAsteroid()
 	start.y = randomI(-(m_cSetts->m_areaHeight/2 + m_cSetts->m_buffer),
 			    m_cSetts->m_areaHeight/2 + m_cSetts->m_buffer);
     }
-    std::cout << side << ": (" << start.x << ", " << start.y << "|" << angle << ")" << std::endl;
+
+    //std::cout << side << ": (" << start.x << ", " << start.y << "|" << angle << ")" << std::endl;
     
     m_asteroids.emplace_back(m_aSetts,
 			     randomI(m_cSetts->m_massRange[0], m_cSetts->m_massRange[1]),

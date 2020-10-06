@@ -1,4 +1,4 @@
-# Tsilkow
+// Tsilkow
 
 #include <iostream>
 #include <vector>
@@ -46,8 +46,6 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "Clear Asteroids");
     window.setFramerateLimit(60);
-    
-    cout << "I saw red venting" << endl;
 
     Controller controller(shr_aSetts, shr_cSetts);
 
