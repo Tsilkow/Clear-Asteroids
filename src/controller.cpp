@@ -21,8 +21,9 @@ sf::Color randomColor(std::vector<float> lightRange)
 	result.r = randomI(0, 255);
 	result.g = randomI(0, 255);
 	result.b = randomI(0, 255);
-    }while(determineLightness(result) > lightRange[0] && determineLightness(result) < lightRange[1]);
-
+    }while(determineLightness(result) < lightRange[0] || determineLightness(result) > lightRange[1]);
+    std::cout << determineLightness(result) << std::endl;
+    
     return result;
 }
 
