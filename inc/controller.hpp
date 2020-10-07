@@ -39,6 +39,8 @@ class Controller
 
     int tick(int ticksPassed);
 
+    void bounce(Asteroid& a, Asteroid& b);
+
     int destroyAt(sf::Vector2f target);
     
     void draw(sf::RenderTarget& target);

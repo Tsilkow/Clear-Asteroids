@@ -47,10 +47,14 @@ class Asteroid
     public:
     Asteroid(const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf::Color color, sf::Vector2f position, sf::Vector2f velocity, float angVelocity);
 
+    void applyForce(sf::Vector2f force) {m_force += force; }
+
     bool tick(sf::FloatRect bounds);
 
     void draw(sf::RenderTarget& target);
 
     const sf::Vector2f getPosition() {return m_position; }
+    const sf::Vector2f getVelocity() {return m_velocity; }
+    const int getMass()   {return m_mass;   }
     const int getRadius() {return m_radius; }
 };

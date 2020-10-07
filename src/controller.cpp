@@ -97,8 +97,39 @@ int Controller::tick(int ticksPassed)
     {
 	m_asteroids.erase(m_asteroids.begin() + toRemove[i]);
     }
+    
+    for(int i = 0; i < m_asteroids.size(); ++i)
+    {
+	for(int j = i+1; j < m_asteroids.size(); ++j)
+	{
+	    if(distance(m_asteroids[i].getPosition(), m_asteroids[j].getPosition())
+	       <= m_asteroids[i].getRadius() + m_asteroids[j].getRadius())
+	    {
+		bounce(m_asteroids[i], m_asteroids[j]);
+	    }
+	}
+    }
 
     return m_asteroids.size();
+}
+
+void Controller::bounce(Asteroid& a, Asteroid& b)
+{
+    float m1 = a.getMass();
+    float m2 = b.getMass();
+    sf::Vector2f v1 = a.getVelocity();
+    sf::Vector2f v2 = b.getVelocity();
+    float bounce = m_cSetts->m_bounce;
+    sf::Vector2f force  = (m1 * (1 - bounce) - m2 * (1 + bounce))/((m1 + m2) * bounce) * v1 * m1 +
+	                  (m2 * (bounce + 1))/((m1 + m2) * bounce) * v2 * m1;
+    sf::Vector2f force2 = (m2 * (1 - bounce) - m1 * (1 + bounce))/((m1 + m2) * bounce) * v2 * m2 +
+                          (m1 * (bounce + 1))/((m1 + m2) * bounce) * v1 * m2;
+     
+    std::cout << "(" << force.x << ", " << force.y << ")" << std::endl;
+    std::cout << "(" << force2.x << ", " << force2.y << ")" << std::endl;
+    
+    a.applyForce(force);
+    b.applyForce(force2);
 }
 
 int Controller::destroyAt(sf::Vector2f target)
