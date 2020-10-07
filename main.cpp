@@ -21,34 +21,35 @@ int main()
 
     AsteroidSettings aSetts =
     {
-	1.f,
-	32,
-	0.1f,
-	4,
-	1,
-	0.3f
+	1.f,  // m_invDensity
+	32,   // TOSegments
+	0.1f, // m_amplitude
+	4,    // m_peakFrequency
+	1,    // m_peakVariation
+	0.3f  // m_peakAmplitude
     };
 
     ControllerSettings cSetts =
     {
-	{2.f, 4.f},
-	{1000, 10000},
-	{-M_PI/60, M_PI/60},
-	{0.5f, 0.8f},
-	800,
-	800,
-	50,
-	60,
-	0.5f
+	{2.f, 4.f},          // m_velocityRange
+	{1000, 10000},       // m_massRange
+	{-M_PI/60, M_PI/60}, // m_angVelocityRange
+	{0.5f, 0.8f},        // m_colorLightRange
+	800,                 // m_areaWidth
+	800,                 // m_areaHeight
+	50,                  // m_buffer
+	2,                   // m_targetting
+	60,                  // m_period
+	0.5f                 // m_bounce
     };
 
     CrosshairSettings crSetts =
     {
-	30,
-	10,
-	{{0.f, 30.f}, {0.f, -30.f}, {30.f, 0.f}, {-30.f, 0.f}},
-	sf::Color(255,   0,   0),
-	sf::Color(255, 255, 255)
+	30,                                                     // m_cooldown
+	10,                                                     // m_maneuverability
+	{{0.f, 30.f}, {0.f, -30.f}, {30.f, 0.f}, {-30.f, 0.f}}, // m_shape
+	sf::Color(255,   0,   0),                               // m_normColor
+	sf::Color(255, 255, 255)                                // m_coolColor
     };
 
     shared_ptr<AsteroidSettings> shr_aSetts = make_shared<AsteroidSettings>(aSetts);

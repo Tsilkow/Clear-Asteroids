@@ -16,6 +16,7 @@ struct ControllerSettings
     int m_areaWidth;
     int m_areaHeight;
     int m_buffer;
+    int m_targetting;
 
     // asteroid simulation settings
     int m_period; // time between creating

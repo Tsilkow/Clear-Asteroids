@@ -11,7 +11,7 @@
 struct AsteroidSettings
 {
     float m_invDensity; // inverse of density
-    int TOSegments;
+    int m_TOSegments;
     float m_amplitude;
     int m_peakFrequency;
     int m_peakVariation;

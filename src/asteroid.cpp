@@ -66,7 +66,7 @@ Asteroid::Asteroid(const std::shared_ptr<AsteroidSettings> aSetts, int mass, sf:
     m_velocity(velocity),
     m_angVelocity(angVelocity)
 {
-    std::vector<float> heights = generateHeights(aSetts->TOSegments, aSetts->m_amplitude, aSetts->m_peakFrequency, aSetts->m_peakVariation, aSetts->m_peakAmplitude);
+    std::vector<float> heights = generateHeights(aSetts->m_TOSegments, aSetts->m_amplitude, aSetts->m_peakFrequency, aSetts->m_peakVariation, aSetts->m_peakAmplitude);
 
     m_radius = sqrt(((float)mass) * 1/M_PI * aSetts->m_invDensity);
 
