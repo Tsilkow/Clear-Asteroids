@@ -55,11 +55,15 @@ void Controller::createAsteroid()
 			    m_cSetts->m_areaHeight/2 + m_cSetts->m_buffer);
     }
 
-    //targetAngle = atan2();
-    angle = normalizeAngle(randomF(0, M_PI) - (side-2) * M_PI/2.f);
+    // an angle from start of the asteroid to the center of screen
+    targetAngle = atan2(-start.y, -start.x);
+    if(targetAngle <   M_PI - side * M_PI/2.f) targetAngle += 2 * M_PI;
+    if(targetAngle > 2*M_PI - side * M_PI/2.f) targetAngle -= 2 * M_PI;
+    angle = normalizeAngle(randomFwT(M_PI - side * M_PI/2.f, 2*M_PI - side * M_PI/2.f,
+				     targetAngle, m_cSetts->m_targetting));
 
-    //std::cout << side << ": (" << start.x << ", " << start.y << "|" << angle
-    //          << " = {" << cos(angle) << ", " << sin(angle) << "})" << std::endl;
+    //std::cout << side << ": (" << start.x << ", " << start.y << "|" << targetAngle
+    //          << " = {" << cos(targetAngle) << ", " << sin(targetAngle) << "})" << std::endl;
     
     m_asteroids.emplace_back(m_aSetts,
 			     randomI(m_cSetts->m_massRange[0], m_cSetts->m_massRange[1]),

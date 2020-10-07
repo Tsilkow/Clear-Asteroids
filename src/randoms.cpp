@@ -14,12 +14,15 @@ int randomI(int min, int max)
 int randomIwT(int min, int max, int target, int attempts)
 {
     int result = randomI(min, max);
-    
+
+    //std::cout << "(" << min << ", " << max << ") => {" << result;
     for(int i = 1; i < attempts; ++i)
     {
 	int attempt = randomI(min, max);
 	if(std::abs(result - target) > std::abs(attempt - target)) result = attempt;
+	//std::cout << ", " << attempt;
     }
+    //std::cout << "|" << target << "} = " << result << std::endl;
 
     return result;
 }
