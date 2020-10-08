@@ -9,6 +9,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
+#include "commons.hpp"
 #include "controller.hpp"
 #include "crosshair.hpp"
 #include "interface.hpp"
@@ -59,7 +60,7 @@ int main()
 	M_PI/600.f  // m_angVelocity
     };
 
-    std::string fontFilename = "TrenchThin.ttf";
+    std::string fontFilename = "Sicretmono.ttf";
     sf::Font font;
     if(!font.loadFromFile(fontFilename))
     {
@@ -84,9 +85,10 @@ int main()
     Interface playInterface(font);
     Interface scoresInterface(font);
 
-    playInterface.addString("0", sf::Vector2f(325, -375), 0, 50);
-    playInterface.addString("0", sf::Vector2f(325, -325), 0, 50); 
-    playInterface.addString(" ", sf::Vector2f(325, -275), 0, 50); 
+    playInterface.addString("0.00", sf::Vector2f(-390, -400), -1, 50);
+    playInterface.addString("0", sf::Vector2f(325, -400), 0, 50); 
+    playInterface.addString("0", sf::Vector2f(325, -350), 0, 50); 
+    playInterface.addString(" ", sf::Vector2f(325, -300), 0, 50);
 
     sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
     window.setView(actionView);
@@ -141,12 +143,13 @@ int main()
 		{
 		    controller.tick(ticksPassed);
 		    crosshair.tick(ticksPassed, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-		    playInterface.setContent(0, std::to_string(killCount));
-		    playInterface.setContent(1, std::to_string(shotCount));
+		    playInterface.setContent(0, trailingZeroes((float)ticksPassed/60.f, 2));
+		    playInterface.setContent(1, std::to_string(killCount));
+		    playInterface.setContent(2, std::to_string(shotCount));
 		    if(shotCount >= 10)
 		    {
-			playInterface.setContent(2, std::to_string((int)std::round(100.f *(float)killCount/
-									      (float)shotCount)) + "%");
+			playInterface.setContent(3, trailingZeroes(100.f *(float)killCount/
+								   (float)shotCount, 1) + "%");
 		    }
 
 		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && crosshair.shoot(ticksPassed))

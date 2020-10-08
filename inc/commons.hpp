@@ -30,3 +30,5 @@ float determineLightness(sf::Color input);
 sf::Color randomColor(std::vector<float> lightRange);
     
 float dotProduct(sf::Vector2f a, sf::Vector2f b);
+
+std::string trailingZeroes(float number, int zeroes = 2);

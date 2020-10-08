@@ -2,7 +2,7 @@
 
 rm -rf build/
 mkdir build/
-cp TrenchThin.ttf build/TrenchThin.ttf
+cp Sicretmono.ttf build/Sicretmono.ttf
 cp station.png build/station.png
 cd build/
 cmake ..

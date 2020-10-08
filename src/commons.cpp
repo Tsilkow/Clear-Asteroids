@@ -2,6 +2,8 @@
 
 
 #include <stdlib.h>
+#include <iomanip>
+#include <sstream>
 #include <math.h>
 
 
@@ -85,5 +87,12 @@ sf::Color randomColor(std::vector<float> lightRange)
 float dotProduct(sf::Vector2f a, sf::Vector2f b)
 {
     return a.x * b.x + a.y * b.y;
+}
+
+std::string trailingZeroes(float number, int zeroes)
+{
+    std::ostringstream out;
+    out << std::setprecision(zeroes) << std::fixed << number;
+    return out.str();
 }
 

@@ -7,5 +7,8 @@ git add CMakeLists.txt
 git add builder.sh
 git add commiter.sh
 git add .gitignore
+git add Sicretmono.ttf
+git add station.png
 
 git commit
+x
