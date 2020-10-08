@@ -1,17 +1,8 @@
 #include "crosshair.hpp"
 
-
+#include "commons.hpp"
 #include <math.h>
 
-float length(sf::Vector2f input)
-{
-    return sqrt(input.x*input.x + input.y*input.y);
-}
-
-float distance(sf::Vector2f a, sf::Vector2f b)
-{
-    return length(a - b);
-}
 
 void gradientColor(std::vector<sf::Color>& result, sf::Color start, sf::Color end, int steps)
 {

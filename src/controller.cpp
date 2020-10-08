@@ -1,43 +1,20 @@
 #include "controller.hpp"
 
-
-#include "randoms.hpp"
+#include "commons.hpp"
 #include <math.h>
 
 
-float determineLightness(sf::Color input)
-{
-    // https://thoughtbot.com/blog/closer-look-color-lightness
-    // values have been normalized (ie divided by 255)
-    return ((float)input.r) * 0.00083372549 +
-	   ((float)input.g) * 0.00280470588 +
-	   ((float)input.b) * 0.00028313725;
-}
 
-sf::Color randomColor(std::vector<float> lightRange)
+Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts,
+		       std::shared_ptr<StationSettings> sSetts):
+    m_aSetts(aSetts), m_cSetts(cSetts), m_lastAstCreated(0), m_station(Station(sSetts))
 {
-    sf::Color result(0, 0, 0);
-    do{
-	result.r = randomI(0, 255);
-	result.g = randomI(0, 255);
-	result.b = randomI(0, 255);
-    }while(determineLightness(result) < lightRange[0] || determineLightness(result) > lightRange[1]);
     
-    return result;
-}
-
-float dotProduct(sf::Vector2f a, sf::Vector2f b)
-{
-    return a.x * b.x + a.y * b.y;
-}
-
-Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts):
-    m_aSetts(aSetts), m_cSetts(cSetts), m_lastAstCreated(0)
-{
     m_bounds = sf::FloatRect(-(m_cSetts->m_areaWidth /2 +   m_cSetts->m_buffer),
 			     -(m_cSetts->m_areaHeight/2 +   m_cSetts->m_buffer),
 			       m_cSetts->m_areaWidth    + 2*m_cSetts->m_buffer,
 			       m_cSetts->m_areaWidth    + 2*m_cSetts->m_buffer);
+
 }
 
 void Controller::createAsteroid()
@@ -80,7 +57,7 @@ void Controller::createAsteroid()
 			    );
 }
 
-int Controller::tick(int ticksPassed)
+bool Controller::tick(int ticksPassed)
 {
     std::vector<int> toRemove;
     
@@ -89,6 +66,8 @@ int Controller::tick(int ticksPassed)
 	createAsteroid();
 	m_lastAstCreated = ticksPassed;
     }
+
+    m_station.tick();
     
     for(int i = 0; i < m_asteroids.size(); ++i)
     {
@@ -115,7 +94,16 @@ int Controller::tick(int ticksPassed)
 	}
     }
 
-    return m_asteroids.size();
+    for(int i = 0; i < m_asteroids.size(); ++i)
+    {
+	if(distance(m_asteroids[i].getPosition(), m_station.getPosition())
+	   <= m_asteroids[i].getRadius() + m_station.getRadius())
+	{
+	    return false;
+	}
+    }
+
+    return true;
 }
 
 void Controller::bounce(Asteroid& a, Asteroid& b)
@@ -174,4 +162,5 @@ void Controller::draw(sf::RenderTarget& target)
     {
 	m_asteroids[i].draw(target);
     }
+    m_station.draw(target);
 }

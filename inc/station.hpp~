@@ -1,0 +1,26 @@
+#pragma once
+
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
+
+
+struct PlanetSettings
+{
+    std::vector<sf::Vector2f> m_shape;
+    sf::Color m_color;
+}
+
+class Planet
+{
+    private:
+    
+    sf::Vector2f m_position;
+    std::vector<sf::Vector2f> m_orbit;
+    std::vector<sf::Vertex> m_staRepres;
+    std::vector<sf::Vertex> m_dynRepres;
+}

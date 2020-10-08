@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "asteroid.hpp"
-#include "crosshair.hpp"
+#include "station.hpp"
 
 
 struct ControllerSettings
@@ -27,6 +27,7 @@ class Controller
 {
     private:
     std::vector<Asteroid> m_asteroids;
+    Station m_station;
     std::shared_ptr<AsteroidSettings> m_aSetts;
     std::shared_ptr<ControllerSettings> m_cSetts;
     int m_lastAstCreated; // tick when last asteroid was created
@@ -35,9 +36,10 @@ class Controller
     void createAsteroid();
     
     public:
-    Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts);
+    Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts,
+	       std::shared_ptr<StationSettings> sSetts);
 
-    int tick(int ticksPassed);
+    bool tick(int ticksPassed);
 
     void bounce(Asteroid& a, Asteroid& b);
 

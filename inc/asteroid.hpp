@@ -8,6 +8,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
+
 struct AsteroidSettings
 {
     float m_invDensity; // inverse of density
@@ -18,9 +19,6 @@ struct AsteroidSettings
     float m_peakAmplitude;
 };
 
-float radToDeg(float radians);
-
-float normalizeAngle(float angle);
 
 // generation of smooth and semi-random change of heights between two set points
 void connectPeaks(std::vector<float>& result, int begin, int end, float amplitude, int loop);

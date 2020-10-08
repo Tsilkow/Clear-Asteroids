@@ -22,7 +22,7 @@ int main()
 
     AsteroidSettings aSetts =
     {
-	1.f,  // m_invDensity
+	0.5f,  // m_invDensity
 	32,   // TOSegments
 	0.1f, // m_amplitude
 	4,    // m_peakFrequency
@@ -53,6 +53,12 @@ int main()
 	sf::Color(255, 255, 255)                                // m_coolColor
     };
 
+    StationSettings sSetts =
+    {
+	25,         // m_radius
+	M_PI/600.f  // m_angVelocity
+    };
+
     std::string fontFilename = "TrenchThin.ttf";
     sf::Font font;
     if(!font.loadFromFile(fontFilename))
@@ -65,11 +71,14 @@ int main()
     shared_ptr<AsteroidSettings> shr_aSetts = make_shared<AsteroidSettings>(aSetts);
     shared_ptr<ControllerSettings> shr_cSetts = make_shared<ControllerSettings>(cSetts);
     shared_ptr<CrosshairSettings> shr_crSetts = make_shared<CrosshairSettings>(crSetts);
+    shared_ptr<StationSettings> shr_sSetts = make_shared<StationSettings>(sSetts);
+
+    shr_sSetts->m_texture.loadFromFile("station.png");
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "Clear Asteroids");
     window.setFramerateLimit(60);
 
-    Controller controller(shr_aSetts, shr_cSetts);
+    Controller controller(shr_aSetts, shr_cSetts, shr_sSetts);
     Crosshair crosshair(shr_crSetts);
     Interface menuInterface(font);
     Interface playInterface(font);

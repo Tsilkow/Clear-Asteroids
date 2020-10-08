@@ -1,21 +1,8 @@
 #include "asteroid.hpp"
 
-
-#include "randoms.hpp"
+#include "commons.hpp"
 #include <math.h>
 
-
-float radToDeg(float radians)
-{
-    return radians * 180/M_PI;
-}
-
-float normalizeAngle(float angle)
-{
-    while(angle <       0) angle += 2*M_PI;
-    while(angle >= 2*M_PI) angle -= 2*M_PI;
-    return angle;
-}
 
 void connectPeaks(std::vector<float>& result, int begin, int end, float amplitude, int loop)
 {
