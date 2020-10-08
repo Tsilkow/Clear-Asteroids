@@ -11,6 +11,7 @@
 
 #include "controller.hpp"
 #include "crosshair.hpp"
+#include "interface.hpp"
 
 
 using namespace std;
@@ -52,6 +53,15 @@ int main()
 	sf::Color(255, 255, 255)                                // m_coolColor
     };
 
+    std::string fontFilename = "Carre-JWja.ttf";
+    sf::Font font;
+    if(!font.loadFromFile(fontFilename))
+    {
+	cout << "!ERROR! Font could not be loaded! Aborting ..." << endl;
+	return 1;
+    }
+    shared_ptr<sf::Font> shr_font = make_shared<sf::Font>(font);
+
     shared_ptr<AsteroidSettings> shr_aSetts = make_shared<AsteroidSettings>(aSetts);
     shared_ptr<ControllerSettings> shr_cSetts = make_shared<ControllerSettings>(cSetts);
     shared_ptr<CrosshairSettings> shr_crSetts = make_shared<CrosshairSettings>(crSetts);
@@ -61,6 +71,12 @@ int main()
 
     Controller controller(shr_aSetts, shr_cSetts);
     Crosshair crosshair(shr_crSetts);
+    Interface menuInterface(font);
+    Interface playInterface(font);
+    Interface scoresInterface(font);
+
+    playInterface.addString("0", sf::Vector2f(350, -350));
+    playInterface.addString("0", sf::Vector2f(350, -320)); 
 
     sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
     window.setView(actionView);
@@ -115,6 +131,8 @@ int main()
 		{
 		    controller.tick(ticksPassed);
 		    crosshair.tick(ticksPassed, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+		    playInterface.setContent(0, std::to_string(killCount));
+		    playInterface.setContent(1, std::to_string(shotCount)); 
 
 		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && crosshair.shoot(ticksPassed))
 		    {
@@ -129,6 +147,7 @@ int main()
 		}
 		controller.draw(window);
 		crosshair.draw(window);
+		playInterface.draw(window);
 		break;
 	    case GameState::Scores:
 		break;
