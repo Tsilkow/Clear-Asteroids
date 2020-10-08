@@ -26,6 +26,11 @@ sf::Color randomColor(std::vector<float> lightRange)
     return result;
 }
 
+float dotProduct(sf::Vector2f a, sf::Vector2f b)
+{
+    return a.x * b.x + a.y * b.y;
+}
+
 Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts):
     m_aSetts(aSetts), m_cSetts(cSetts), m_lastAstCreated(0)
 {
@@ -115,7 +120,7 @@ int Controller::tick(int ticksPassed)
 
 void Controller::bounce(Asteroid& a, Asteroid& b)
 {
-    float m1 = a.getMass();
+    /*float m1 = a.getMass();
     float m2 = b.getMass();
     sf::Vector2f v1 = a.getVelocity();
     sf::Vector2f v2 = b.getVelocity();
@@ -126,10 +131,18 @@ void Controller::bounce(Asteroid& a, Asteroid& b)
                           (m1 * (bounce + 1))/((m1 + m2) * bounce) * v1 * m2;
      
     std::cout << "(" << force.x << ", " << force.y << ")" << std::endl;
-    std::cout << "(" << force2.x << ", " << force2.y << ")" << std::endl;
-    
-    a.applyForce(force);
-    b.applyForce(force2);
+    std::cout << "(" << force2.x << ", " << force2.y << ")" << std::endl;*/
+
+    sf::Vector2f connector = b.getPosition() - a.getPosition();
+    float alongDir = dotProduct(b.getVelocity() - a.getVelocity(), connector/length(connector));
+	    
+    if(alongDir <= 0)
+    {
+	sf::Vector2f impulse = -alongDir * connector/length(connector)/(1.f/a.getMass() + 1.f/b.getMass());
+
+	a.applyForce(-impulse * (1 + m_cSetts->m_bounce));
+	b.applyForce( impulse * (1 + m_cSetts->m_bounce));
+    }
 }
 
 int Controller::destroyAt(sf::Vector2f target)
