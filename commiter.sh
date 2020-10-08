@@ -6,5 +6,6 @@ git add main.cpp
 git add CMakeLists.txt
 git add builder.sh
 git add commiter.sh
+git add .gitignore
 
 git commit
