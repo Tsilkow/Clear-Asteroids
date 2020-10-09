@@ -68,6 +68,13 @@ int main()
 	cout << "Error! Could not read score file. Generating an empty one" << endl;
     }
 
+    for(int i = 0; i < 20; ++i)
+    {
+	int score = randomI(0, 100);
+	cout << score << " ---> " << scores.isScoreSignificant(score) << " "
+	     << scores.addScore(to_string(i), score) << endl;
+    }
+
     scores.save(scoreFilename);
 
     std::string fontFilename = "Sicretmono.ttf";
