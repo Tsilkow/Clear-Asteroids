@@ -34,7 +34,7 @@ int main()
 
     ControllerSettings cSetts =
     {
-	{2.f, 4.f},          // m_velocityRange
+	{4.f, 8.f},          // m_velocityRange
 	{1000, 10000},       // m_massRange
 	{-M_PI/60, M_PI/60}, // m_angVelocityRange
 	{0.5f, 0.8f},        // m_colorLightRange
@@ -42,7 +42,8 @@ int main()
 	800,                 // m_areaHeight
 	50,                  // m_buffer
 	2,                   // m_targetting
-	60,                  // m_period
+	60,                  // m_startAPM - starting value ofasteroids per minute
+	60,                  // m_APMincrease - APM increase per minute
 	0.5f                 // m_bounce
     };
 

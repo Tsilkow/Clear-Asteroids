@@ -19,7 +19,8 @@ struct ControllerSettings
     int m_targetting;
 
     // asteroid simulation settings
-    int m_period; // time between creating
+    int m_startAPM; // starting asteroids per minute
+    int m_APMincrease; // APM increase per minute
     float m_bounce;
 };
 
@@ -27,6 +28,7 @@ class Controller
 {
     private:
     std::vector<Asteroid> m_asteroids;
+    float m_APM;
     Station m_station;
     std::shared_ptr<AsteroidSettings> m_aSetts;
     std::shared_ptr<ControllerSettings> m_cSetts;

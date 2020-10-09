@@ -21,7 +21,6 @@ bool Scores::load(std::string filename)
     m_scores.clear();
 
     json parse = json::parse(file);
-    std::cout << std::setw(4) << parse << std::endl;
 
     try{
 	for(int i = 0; i < parse["scores"].size() && i < m_scoresKept; ++i)
@@ -36,10 +35,6 @@ bool Scores::load(std::string filename)
     }
     
     file.close();
-
-    std::cout << m_scores.size() << std::endl;
-
-    getchar();
 
     return true;
 }

@@ -7,9 +7,12 @@
 
 Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts,
 		       std::shared_ptr<StationSettings> sSetts):
-    m_aSetts(aSetts), m_cSetts(cSetts), m_lastAstCreated(0), m_station(Station(sSetts))
+    m_aSetts(aSetts),
+    m_cSetts(cSetts),
+    m_lastAstCreated(0),
+    m_station(Station(sSetts)),
+    m_APM((float)cSetts->m_startAPM)
 {
-    
     m_bounds = sf::FloatRect(-(m_cSetts->m_areaWidth /2 +   m_cSetts->m_buffer),
 			     -(m_cSetts->m_areaHeight/2 +   m_cSetts->m_buffer),
 			       m_cSetts->m_areaWidth    + 2*m_cSetts->m_buffer,
@@ -61,11 +64,13 @@ bool Controller::tick(int ticksPassed)
 {
     std::vector<int> toRemove;
     
-    if(ticksPassed - m_lastAstCreated >= m_cSetts->m_period)
+    if(ticksPassed - m_lastAstCreated >= 3600.f/m_APM)
     {
 	createAsteroid();
 	m_lastAstCreated = ticksPassed;
     }
+
+    m_APM += ((float)m_cSetts->m_APMincrease) / 3600.f;
 
     m_station.tick();
     
