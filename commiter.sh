@@ -11,4 +11,3 @@ git add Sicretmono.ttf
 git add station.png
 
 git commit
-x

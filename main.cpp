@@ -13,6 +13,7 @@
 #include "controller.hpp"
 #include "crosshair.hpp"
 #include "interface.hpp"
+#include "scores.hpp"
 
 
 using namespace std;
@@ -59,6 +60,15 @@ int main()
 	25,         // m_radius
 	M_PI/600.f  // m_angVelocity
     };
+
+    std::string scoreFilename = "scores.json";
+    Scores scores(10);
+    if(!scores.load(scoreFilename))
+    {
+	cout << "Error! Could not read score file. Generating an empty one" << endl;
+    }
+
+    scores.save(scoreFilename);
 
     std::string fontFilename = "Sicretmono.ttf";
     sf::Font font;
@@ -141,7 +151,7 @@ int main()
 
 		if(hasFocus)
 		{
-		    controller.tick(ticksPassed);
+		    if(!controller.tick(ticksPassed)) cout << "Station's been hit" << endl;
 		    crosshair.tick(ticksPassed, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 		    playInterface.setContent(0, trailingZeroes((float)ticksPassed/60.f, 2));
 		    playInterface.setContent(1, std::to_string(killCount));
@@ -152,7 +162,8 @@ int main()
 								   (float)shotCount, 1) + "%");
 		    }
 
-		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && crosshair.shoot(ticksPassed))
+		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
+		       crosshair.shoot(ticksPassed))
 		    {
 			++shotCount;
 			killCount += controller.destroyAt(crosshair.getPosition());

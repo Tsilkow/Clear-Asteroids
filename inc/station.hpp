@@ -25,6 +25,7 @@ class Station
     int m_radius;
     float m_angVelocity;
     sf::Sprite m_repres;
+    sf::CircleShape m_mask;
 
     public:
     Station(std::shared_ptr<StationSettings>& sSetts);

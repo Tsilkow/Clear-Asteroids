@@ -16,6 +16,8 @@ Station::Station(std::shared_ptr<StationSettings>& sSetts):
     float scale = std::max((float)m_radius / m_sSetts->m_texture.getSize().x,
 			   (float)m_radius / m_sSetts->m_texture.getSize().y) * 2.f;
     m_repres.setScale(sf::Vector2f(1.f, 1.f) * scale);
+    m_mask.setPosition(sf::Vector2f(-1.f, -1.f) * (float)m_radius);
+    m_mask.setRadius(m_radius);
 }
 
 void Station::tick()
@@ -28,4 +30,5 @@ void Station::tick()
 void Station::draw(sf::RenderTarget& target)
 {
     target.draw(m_repres);
+    //target.draw(m_mask);
 }
