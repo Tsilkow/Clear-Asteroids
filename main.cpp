@@ -90,69 +90,137 @@ int main()
 
     Controller controller(shr_aSetts, shr_cSetts, shr_sSetts);
     Crosshair crosshair(shr_crSetts);
-    Interface menuInterface(font);
-    Interface playInterface(font);
-    Interface scoresInterface(font);
+    Interface menuInterface(font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
+    Interface playInterface(font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 0));
+    Interface scoresInterface(font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
+
+    menuInterface.addString("... and then, there was only one objective before them:",
+			    sf::Vector2f(0, -310), 0, 20);
+    menuInterface.setStyle(-1, 2);
+    menuInterface.addString("CLEAR ASTEROIDS", sf::Vector2f(0, -300), 0, 100);
+    menuInterface.setStyle(-1, 1);
+    menuInterface.addString("Play"  , sf::Vector2f(0, -50), 0, 60);
+    menuInterface.addButton(-1, sf::FloatRect(0, 0, 0, 0));
+    menuInterface.addString("Scores", sf::Vector2f(0,  50), 0, 60);
+    menuInterface.addButton(-1, sf::FloatRect(0, 0, 0, 0));
 
     playInterface.addString("0.00", sf::Vector2f(-390, -400), -1, 50);
     playInterface.addString("0", sf::Vector2f(325, -400), 0, 50); 
     playInterface.addString("0", sf::Vector2f(325, -350), 0, 50); 
     playInterface.addString(" ", sf::Vector2f(325, -300), 0, 50);
+    
+    scoresInterface.addString("Highscores", sf::Vector2f(0, -300), 0, 60);
+    scoresInterface.addString(" 1.                         ", sf::Vector2f(0, -225), 0, 50);
+    scoresInterface.addString(" 2.                         ", sf::Vector2f(0, -175), 0, 50);
+    scoresInterface.addString(" 3.                         ", sf::Vector2f(0, -125), 0, 50);
+    scoresInterface.addString(" 4.                         ", sf::Vector2f(0,  -75), 0, 50);
+    scoresInterface.addString(" 5.                         ", sf::Vector2f(0,  -25), 0, 50);
+    scoresInterface.addString(" 6.                         ", sf::Vector2f(0,   25), 0, 50);
+    scoresInterface.addString(" 7.                         ", sf::Vector2f(0,   75), 0, 50);
+    scoresInterface.addString(" 8.                         ", sf::Vector2f(0,  125), 0, 50);
+    scoresInterface.addString(" 9.                         ", sf::Vector2f(0,  175), 0, 50);
+    scoresInterface.addString("10.                         ", sf::Vector2f(0,  225), 0, 50);
+    scoresInterface.addString("Back", sf::Vector2f(0, 300), 0, 60);
+    scoresInterface.addButton(-1, sf::FloatRect(0, 0, 0, 0));
 
     sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
     window.setView(actionView);
 
     enum GameState{Menu, Play, Scores};
-    GameState currState = Play;
+    GameState currState = GameState::Menu;
     bool hasFocus = true;
+    bool start = true;
     int ticksPassed = 0;
+    int playStart = -1;
     int shotCount = 0;
     int killCount = 0;
+    int score = 0;
 
     while(window.isOpen())
     {
 	sf::Event event;
 	
 	window.clear();
+	
+	while (window.pollEvent(event))
+	{
+	    switch(event.type)
+	    {
+		case sf::Event::Closed:
+		    window.close();
+		    break;
+		case sf::Event::LostFocus:
+		    hasFocus = false;
+		    //std::cout << "LOST FOCUS" << std::endl;
+		    break;
+		case sf::Event::GainedFocus:
+		    hasFocus = true;
+		    //std::cout << "GAINED FOCUS" << std::endl;
+		    break;
+		case sf::Event::KeyPressed:
+		    if(hasFocus)
+		    {
+			switch(event.key.code)
+			{
+			    case sf::Keyboard::Escape:
+				window.close();
+				break;
+			}
+		    }
+		    break;
+	    }
+	}
+	
 	switch(currState)
 	{
 	    case GameState::Menu:
-		break;
-	    case GameState::Play:
-		while (window.pollEvent(event))
+		if(hasFocus)
 		{
-		    switch(event.type)
-		    {
-			case sf::Event::Closed:
-			    window.close();
-			    break;
-			case sf::Event::LostFocus:
-			    hasFocus = false;
-			    //std::cout << "LOST FOCUS" << std::endl;
-			    break;
-			case sf::Event::GainedFocus:
-			    hasFocus = true;
-			    //std::cout << "GAINED FOCUS" << std::endl;
-			    break;
-			case sf::Event::KeyPressed:
-			    if(hasFocus)
-			    {
-				switch(event.key.code)
-				{
-				    case sf::Keyboard::Escape:
-					window.close();
-					break;
-				}
-			    }
-			    break;
-		    }
+		    controller.tick(false, ticksPassed);
+		}
+		
+		switch(menuInterface.tick(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
+		{
+		    case -1: break;
+		    case  0:
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+			    currState = GameState::Play;
+			    playStart = -1;
+			}
+			break;
+		    case  1:
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+			    currState = GameState::Scores;
+			}
+			break;
+		}
+		
+		controller.draw(window);
+		menuInterface.draw(window);
+		break;
+		
+	    case GameState::Play:
+		if(playStart == -1)
+		{
+		    playStart = ticksPassed;
+		    controller.start();
 		}
 
 		if(hasFocus)
 		{
-		    if(!controller.tick(ticksPassed)) cout << "Station's been hit" << endl;
+		    score = ticksPassed - playStart;
+		    if(!controller.tick(true, ticksPassed))
+		    {
+			score += 100.f *(float)killCount/(float)shotCount;
+			controller.killStation();
+			if(scores.isScoreSignificant(score)) currState = GameState::Scores;
+			else currState = GameState::Menu;
+			break;
+		    }
 		    crosshair.tick(ticksPassed, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-		    playInterface.setContent(0, trailingZeroes((float)ticksPassed/60.f, 2));
+		    playInterface.setContent(0, trailingZeroes((float)(ticksPassed - playStart)/60.f, 2));
 		    playInterface.setContent(1, std::to_string(killCount));
 		    playInterface.setContent(2, std::to_string(shotCount));
 		    if(shotCount >= 10)
@@ -167,7 +235,6 @@ int main()
 			++shotCount;
 			killCount += controller.destroyAt(crosshair.getPosition());
 		    }
-		    ++ticksPassed;
 		}
 		else
 		{
@@ -177,9 +244,34 @@ int main()
 		crosshair.draw(window);
 		playInterface.draw(window);
 		break;
+		
 	    case GameState::Scores:
+		if(hasFocus)
+		{
+		    controller.tick(false, ticksPassed);
+		}
+		
+		switch(scoresInterface.tick(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
+		{
+		    case -1: break;
+		    case  0:
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+			    currState = GameState::Menu;
+			}
+			break;
+		}
+		
+		controller.draw(window);
+		scoresInterface.draw(window);
 		break;
 	}
+
+	if(hasFocus)
+	{
+	    ++ticksPassed;
+	}
+	
 	window.display();
     }
     

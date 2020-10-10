@@ -9,8 +9,8 @@ Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr
 		       std::shared_ptr<StationSettings> sSetts):
     m_aSetts(aSetts),
     m_cSetts(cSetts),
+    m_sSetts(sSetts),
     m_lastAstCreated(0),
-    m_station(Station(sSetts)),
     m_APM((float)cSetts->m_startAPM)
 {
     m_bounds = sf::FloatRect(-(m_cSetts->m_areaWidth /2 +   m_cSetts->m_buffer),
@@ -60,7 +60,7 @@ void Controller::createAsteroid()
 			    );
 }
 
-bool Controller::tick(int ticksPassed)
+bool Controller::tick(bool action, int ticksPassed)
 {
     std::vector<int> toRemove;
     
@@ -71,8 +71,6 @@ bool Controller::tick(int ticksPassed)
     }
 
     m_APM += ((float)m_cSetts->m_APMincrease) / 3600.f;
-
-    m_station.tick();
     
     for(int i = 0; i < m_asteroids.size(); ++i)
     {
@@ -99,12 +97,16 @@ bool Controller::tick(int ticksPassed)
 	}
     }
 
-    for(int i = 0; i < m_asteroids.size(); ++i)
+    if(m_station)
     {
-	if(distance(m_asteroids[i].getPosition(), m_station.getPosition())
-	   <= m_asteroids[i].getRadius() + m_station.getRadius())
+	m_station->tick();
+	for(int i = 0; i < m_asteroids.size(); ++i)
 	{
-	    return false;
+	    if(distance(m_asteroids[i].getPosition(), m_station->getPosition())
+	       <= m_asteroids[i].getRadius() + m_station->getRadius())
+	    {
+		return false;
+	    }
 	}
     }
 
@@ -161,11 +163,21 @@ int Controller::destroyAt(sf::Vector2f target)
     return kills;
 }
 
+void Controller::start()
+{    
+    m_station = std::make_shared<Station>(m_sSetts);
+}
+
+void Controller::killStation()
+{
+    m_station = nullptr;
+}
+
 void Controller::draw(sf::RenderTarget& target)
 {
     for(int i = 0; i < m_asteroids.size(); ++i)
     {
 	m_asteroids[i].draw(target);
     }
-    m_station.draw(target);
+    if(m_station) m_station->draw(target);
 }

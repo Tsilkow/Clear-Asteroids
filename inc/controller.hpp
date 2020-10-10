@@ -29,9 +29,10 @@ class Controller
     private:
     std::vector<Asteroid> m_asteroids;
     float m_APM;
-    Station m_station;
+    std::shared_ptr<Station> m_station;
     std::shared_ptr<AsteroidSettings> m_aSetts;
     std::shared_ptr<ControllerSettings> m_cSetts;
+    std::shared_ptr<StationSettings> m_sSetts;
     int m_lastAstCreated; // tick when last asteroid was created
     sf::FloatRect m_bounds;
 
@@ -41,11 +42,15 @@ class Controller
     Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts,
 	       std::shared_ptr<StationSettings> sSetts);
 
-    bool tick(int ticksPassed);
+    bool tick(bool acion, int ticksPassed);
 
     void bounce(Asteroid& a, Asteroid& b);
 
     int destroyAt(sf::Vector2f target);
+
+    void start();
+
+    void killStation();
     
     void draw(sf::RenderTarget& target);
 };
