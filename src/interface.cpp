@@ -33,15 +33,10 @@ void TextBox::adjustPosition()
 {
     float width = m_text.getGlobalBounds().width;
 
-    std::cout << m_text.getString().toAnsiString() << std::endl;
-
     m_text.setPosition(
 	   sf::Vector2f(
 		  std::round(m_position.x - (m_alignment+1) * width * 0.5f),
 		  m_position.y));
-    
-    std::cout << m_text.getGlobalBounds().width << std::endl;
-    std::cout << getText().getGlobalBounds().width << std::endl;
 }
 
 void TextBox::draw(sf::RenderTarget& target)
@@ -151,16 +146,8 @@ bool Interface::addButton(std::string key, std::string textKey, sf::FloatRect bo
     auto found = m_textBoxes.find(textKey);
     if(found != m_textBoxes.end())
     {
-	std::cout << "Found it! : " << found->first << std::endl;
-	if(bounds.width == 0 || bounds.height == 0) /*bounds = */
-	{
-	    auto text = found->second.getText();
-	    std::cout << text.getString().toAnsiString() << std::endl;
-	    auto newBounds = text.getGlobalBounds();
-	    std::cout << "Bound it!" << std::endl;
-	    std::cout << newBounds.width << std::endl;
-	}
-	std::cout << "Bound it!" << std::endl;
+	if(bounds.width == 0 || bounds.height == 0) bounds = found->second.getText().getGlobalBounds();
+	
 	m_buttons.insert({key, Button(found->second.getText(), bounds)});
 	m_textBoxes.erase(found);
 	

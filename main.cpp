@@ -94,18 +94,13 @@ int main()
     Interface playInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 0));
     Interface scoresInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
 
-    cout << "I don't have all day to RUN AROUND IN CIRCLES" << endl;
     menuInterface.addTextBox("intro", "... and then, there was only one objective before them:",
 			  sf::Vector2f(0, -310), 20, 0, sf::Color::White, 2);
     menuInterface.addTextBox("title", "CLEAR ASTEROIDS", sf::Vector2f(0, -300), 100, 0, sf::Color::White, 1);
     menuInterface.addTextBox("tPlay", "Play"  , sf::Vector2f(0, -50), 60, 0);
-    cout << "EAT LEAD" << endl;
     menuInterface.addButton("bPlay", "tPlay", sf::FloatRect(0, 0, 0, 0));
-    cout << "EAT LEAD" << endl;
     menuInterface.addTextBox("tScores", "Scores", sf::Vector2f(0,  50), 60, 0);
     menuInterface.addButton("bScores", "tScores", sf::FloatRect(0, 0, 0, 0));
-
-    cout << "EAT LEAD" << endl;
 
     playInterface.addTextBox("timer", "0.00", sf::Vector2f(-390, -400), 50, -1);
     playInterface.addTextBox("kills", "0", sf::Vector2f(325, -400), 50, 0); 
@@ -179,7 +174,6 @@ int main()
 	switch(currState)
 	{
 	    case GameState::Menu:
-		cout << "IM IN THE MOTHERFUCKING MENU" << endl;
 		if(hasFocus)
 		{
 		    controller.tick(false, ticksPassed);
