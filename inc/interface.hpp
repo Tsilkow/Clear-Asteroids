@@ -83,7 +83,7 @@ class Interface
     void addTextBox(std::string key, std::string content, sf::Vector2f position, int size=24,
 		    int alignment = 0, sf::Color color = sf::Color(255, 255, 255), int style=0);
     
-    void changeTextBox(std::string key, std::string content);
+    bool changeTextBox(std::string key, std::string content);
 
     bool delTextBox(std::string key);
 

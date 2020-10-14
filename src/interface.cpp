@@ -121,12 +121,26 @@ void Interface::addTextBox(std::string key, std::string content, sf::Vector2f po
     TextBox temp(m_font, content, position, size, alignment, color, style);
     
     if(m_textBoxes.find(key) == m_textBoxes.end()) m_textBoxes.insert(make_pair(key, temp));
-    else m_textBoxes.find(key)->second = temp;
+    else
+    {
+	std::cout << "TextBox " << key << "already exist" << std::endl;
+	m_textBoxes.find(key)->second = temp;
+    }
 }
 
-void Interface::changeTextBox(std::string key, std::string content)
+bool Interface::changeTextBox(std::string key, std::string content)
 {
-    m_textBoxes.find("key")->second.setContent(content);
+    auto found = m_textBoxes.find(key);
+    if(found != m_textBoxes.end())
+    {
+        found->second.setContent(content);
+	return true;
+    }
+    else
+    {
+	std::cout << "Error! Could not find TextBox with key " << key << "." << std::endl;
+	return false;
+    }
 }
 
 bool Interface::delTextBox(std::string key)

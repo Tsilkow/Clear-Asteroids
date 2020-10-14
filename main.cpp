@@ -107,7 +107,7 @@ int main()
     playInterface.addTextBox("shots", "0", sf::Vector2f(325, -350), 50, 0); 
     playInterface.addTextBox("efficiency", " ", sf::Vector2f(325, -300), 50, 0);
     
-    scoresInterface.addTextBox("title", "Highscores", sf::Vector2f(0, -300), 0, 60);
+    scoresInterface.addTextBox("title", "Highscores", sf::Vector2f(0, -300), 60, 0);
     scoresInterface.addTextBox("1. place",  " 1.                         ", sf::Vector2f(0, -225), 50, 0);
     scoresInterface.addTextBox("2. place",  " 2.                         ", sf::Vector2f(0, -175), 50, 0);
     scoresInterface.addTextBox("3. place",  " 3.                         ", sf::Vector2f(0, -125), 50, 0);
@@ -118,7 +118,7 @@ int main()
     scoresInterface.addTextBox("8. place",  " 8.                         ", sf::Vector2f(0,  125), 50, 0);
     scoresInterface.addTextBox("9. place",  " 9.                         " , sf::Vector2f(0,  175), 50, 0);
     scoresInterface.addTextBox("10. place", "10.                         ", sf::Vector2f(0,  225), 50, 0);
-    scoresInterface.addTextBox("tBack", "Back", sf::Vector2f(0, 300), 0, 60);
+    scoresInterface.addTextBox("tBack", "Back", sf::Vector2f(0, 300), 60, 0);
     scoresInterface.addButton("bBack", "tBack", sf::FloatRect(0, 0, 0, 0));
 
     sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
@@ -263,9 +263,9 @@ int main()
 		{
 		    controller.tick(false, ticksPassed);
 
-		    auto input = menuInterface.tick(ticksPassed,
-						    window.mapPixelToCoords(sf::Mouse::getPosition(window)),
-						    event);
+		    auto input = scoresInterface.tick(ticksPassed,
+						      window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+						      event);
 
 		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		    {
