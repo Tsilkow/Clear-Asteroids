@@ -63,10 +63,23 @@ bool Scores::save(std::string filename)
     return true;
 }
 
-bool Scores::isScoreSignificant(int score)
+int Scores::isScoreSignificant(int score)
 {
-    if(m_scores.size() < m_scoresKept || m_scores.back().second < score) return true;
-    return false;
+    int result = -1;
+    bool scoreFound = false;
+
+    for(int i = 0; i < m_scores.size(); ++i)
+    {
+	if(score > m_scores[i].second)
+	{
+	    result = i;
+	    scoreFound = true;
+	}
+	if(scoreFound) break;
+    }
+    if(!scoreFound && m_scores.size() < m_scoresKept) result = m_scores.size();
+    
+    return result;
 }
 
 bool Scores::addScore(std::string name, int score)

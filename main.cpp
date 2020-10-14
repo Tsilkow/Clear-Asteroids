@@ -90,38 +90,41 @@ int main()
 
     Controller controller(shr_aSetts, shr_cSetts, shr_sSetts);
     Crosshair crosshair(shr_crSetts);
-    Interface menuInterface(font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
-    Interface playInterface(font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 0));
-    Interface scoresInterface(font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
+    Interface menuInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
+    Interface playInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 0));
+    Interface scoresInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
 
-    menuInterface.addString("... and then, there was only one objective before them:",
-			    sf::Vector2f(0, -310), 0, 20);
-    menuInterface.setStyle(-1, 2);
-    menuInterface.addString("CLEAR ASTEROIDS", sf::Vector2f(0, -300), 0, 100);
-    menuInterface.setStyle(-1, 1);
-    menuInterface.addString("Play"  , sf::Vector2f(0, -50), 0, 60);
-    menuInterface.addButton(-1, sf::FloatRect(0, 0, 0, 0));
-    menuInterface.addString("Scores", sf::Vector2f(0,  50), 0, 60);
-    menuInterface.addButton(-1, sf::FloatRect(0, 0, 0, 0));
+    cout << "I don't have all day to RUN AROUND IN CIRCLES" << endl;
+    menuInterface.addTextBox("intro", "... and then, there was only one objective before them:",
+			  sf::Vector2f(0, -310), 20, 0, sf::Color::White, 2);
+    menuInterface.addTextBox("title", "CLEAR ASTEROIDS", sf::Vector2f(0, -300), 100, 0, sf::Color::White, 1);
+    menuInterface.addTextBox("tPlay", "Play"  , sf::Vector2f(0, -50), 60, 0);
+    cout << "EAT LEAD" << endl;
+    menuInterface.addButton("bPlay", "tPlay", sf::FloatRect(0, 0, 0, 0));
+    cout << "EAT LEAD" << endl;
+    menuInterface.addTextBox("tScores", "Scores", sf::Vector2f(0,  50), 60, 0);
+    menuInterface.addButton("bScores", "tScores", sf::FloatRect(0, 0, 0, 0));
 
-    playInterface.addString("0.00", sf::Vector2f(-390, -400), -1, 50);
-    playInterface.addString("0", sf::Vector2f(325, -400), 0, 50); 
-    playInterface.addString("0", sf::Vector2f(325, -350), 0, 50); 
-    playInterface.addString(" ", sf::Vector2f(325, -300), 0, 50);
+    cout << "EAT LEAD" << endl;
+
+    playInterface.addTextBox("timer", "0.00", sf::Vector2f(-390, -400), 50, -1);
+    playInterface.addTextBox("kills", "0", sf::Vector2f(325, -400), 50, 0); 
+    playInterface.addTextBox("shots", "0", sf::Vector2f(325, -350), 50, 0); 
+    playInterface.addTextBox("efficiency", " ", sf::Vector2f(325, -300), 50, 0);
     
-    scoresInterface.addString("Highscores", sf::Vector2f(0, -300), 0, 60);
-    scoresInterface.addString(" 1.                         ", sf::Vector2f(0, -225), 0, 50);
-    scoresInterface.addString(" 2.                         ", sf::Vector2f(0, -175), 0, 50);
-    scoresInterface.addString(" 3.                         ", sf::Vector2f(0, -125), 0, 50);
-    scoresInterface.addString(" 4.                         ", sf::Vector2f(0,  -75), 0, 50);
-    scoresInterface.addString(" 5.                         ", sf::Vector2f(0,  -25), 0, 50);
-    scoresInterface.addString(" 6.                         ", sf::Vector2f(0,   25), 0, 50);
-    scoresInterface.addString(" 7.                         ", sf::Vector2f(0,   75), 0, 50);
-    scoresInterface.addString(" 8.                         ", sf::Vector2f(0,  125), 0, 50);
-    scoresInterface.addString(" 9.                         ", sf::Vector2f(0,  175), 0, 50);
-    scoresInterface.addString("10.                         ", sf::Vector2f(0,  225), 0, 50);
-    scoresInterface.addString("Back", sf::Vector2f(0, 300), 0, 60);
-    scoresInterface.addButton(-1, sf::FloatRect(0, 0, 0, 0));
+    scoresInterface.addTextBox("title", "Highscores", sf::Vector2f(0, -300), 0, 60);
+    scoresInterface.addTextBox("1. place",  " 1.                         ", sf::Vector2f(0, -225), 50, 0);
+    scoresInterface.addTextBox("2. place",  " 2.                         ", sf::Vector2f(0, -175), 50, 0);
+    scoresInterface.addTextBox("3. place",  " 3.                         ", sf::Vector2f(0, -125), 50, 0);
+    scoresInterface.addTextBox("4. place",  " 4.                         ", sf::Vector2f(0,  -75), 50, 0);
+    scoresInterface.addTextBox("5. place",  " 5.                         ", sf::Vector2f(0,  -25), 50, 0);
+    scoresInterface.addTextBox("6. place",  " 6.                         ", sf::Vector2f(0,   25), 50, 0);
+    scoresInterface.addTextBox("7. place",  " 7.                         ", sf::Vector2f(0,   75), 50, 0);
+    scoresInterface.addTextBox("8. place",  " 8.                         ", sf::Vector2f(0,  125), 50, 0);
+    scoresInterface.addTextBox("9. place",  " 9.                         " , sf::Vector2f(0,  175), 50, 0);
+    scoresInterface.addTextBox("10. place", "10.                         ", sf::Vector2f(0,  225), 50, 0);
+    scoresInterface.addTextBox("tBack", "Back", sf::Vector2f(0, 300), 0, 60);
+    scoresInterface.addButton("bBack", "tBack", sf::FloatRect(0, 0, 0, 0));
 
     sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
     window.setView(actionView);
@@ -130,11 +133,13 @@ int main()
     GameState currState = GameState::Menu;
     bool hasFocus = true;
     bool start = true;
+    bool newScore = false;
     int ticksPassed = 0;
     int playStart = -1;
     int shotCount = 0;
     int killCount = 0;
     int score = 0;
+    int lastScore = 0;
 
     while(window.isOpen())
     {
@@ -174,27 +179,27 @@ int main()
 	switch(currState)
 	{
 	    case GameState::Menu:
+		cout << "IM IN THE MOTHERFUCKING MENU" << endl;
 		if(hasFocus)
 		{
 		    controller.tick(false, ticksPassed);
-		}
-		
-		switch(menuInterface.tick(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
-		{
-		    case -1: break;
-		    case  0:
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+		    auto input = menuInterface.tick(ticksPassed,
+						    window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+						    event);
+
+		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		    {
+			if(input.first == "bPlay")
 			{
 			    currState = GameState::Play;
 			    playStart = -1;
 			}
-			break;
-		    case  1:
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			else if(input.first == "bScores")
 			{
 			    currState = GameState::Scores;
 			}
-			break;
+		    }
 		}
 		
 		controller.draw(window);
@@ -213,19 +218,28 @@ int main()
 		    score = ticksPassed - playStart;
 		    if(!controller.tick(true, ticksPassed))
 		    {
-			score += 100.f *(float)killCount/(float)shotCount;
+			score += 0.5f*score * (float)killCount/(float)shotCount;
+			lastScore = score;
 			controller.killStation();
-			if(scores.isScoreSignificant(score)) currState = GameState::Scores;
+			if(scores.isScoreSignificant(score) >= 0)
+			{
+			    currState = GameState::Scores;
+			    newScore = true;
+			}
 			else currState = GameState::Menu;
 			break;
 		    }
 		    crosshair.tick(ticksPassed, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-		    playInterface.setContent(0, trailingZeroes((float)(ticksPassed - playStart)/60.f, 2));
-		    playInterface.setContent(1, std::to_string(killCount));
-		    playInterface.setContent(2, std::to_string(shotCount));
+		    playInterface.changeTextBox("timer",
+						trailingZeroes((float)(ticksPassed - playStart)/60.f, 2));
+		    playInterface.changeTextBox("kills",
+						std::to_string(killCount));
+		    playInterface.changeTextBox("shots",
+						std::to_string(shotCount));
 		    if(shotCount >= 10)
 		    {
-			playInterface.setContent(3, trailingZeroes(100.f *(float)killCount/
+			playInterface.changeTextBox("efficiency",
+						    trailingZeroes(100.f *(float)killCount/
 								   (float)shotCount, 1) + "%");
 		    }
 
@@ -246,20 +260,26 @@ int main()
 		break;
 		
 	    case GameState::Scores:
+		if(newScore)
+		{
+		    newScore = false;
+		}
+		
 		if(hasFocus)
 		{
 		    controller.tick(false, ticksPassed);
-		}
-		
-		switch(scoresInterface.tick(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
-		{
-		    case -1: break;
-		    case  0:
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+		    auto input = menuInterface.tick(ticksPassed,
+						    window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+						    event);
+
+		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		    {
+			if(input.first == "bBack")
 			{
 			    currState = GameState::Menu;
 			}
-			break;
+		    }
 		}
 		
 		controller.draw(window);

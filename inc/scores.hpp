@@ -18,7 +18,7 @@ class Scores
 
     bool save(std::string filename);
 
-    bool isScoreSignificant(int score);
+    int isScoreSignificant(int score);
     
     bool addScore(std::string name, int score);
 
