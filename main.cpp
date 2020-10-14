@@ -93,6 +93,7 @@ int main()
     Interface menuInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
     Interface playInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 0));
     Interface scoresInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
+    Interface pauseInterface(shr_font, sf::Vector2f(800, 800), sf::Color (0, 0, 0, 255));
 
     menuInterface.addTextBox("intro", "... and then, there was only one objective before them:",
 			  sf::Vector2f(0, -310), 20, 0, sf::Color::White, 2);
@@ -101,6 +102,8 @@ int main()
     menuInterface.addButton("bPlay", "tPlay", sf::FloatRect(0, 0, 0, 0));
     menuInterface.addTextBox("tScores", "Scores", sf::Vector2f(0,  50), 60, 0);
     menuInterface.addButton("bScores", "tScores", sf::FloatRect(0, 0, 0, 0));
+    menuInterface.addTextBox("tExit", "Exit", sf::Vector2f(0,  150), 60, 0);
+    menuInterface.addButton("bExit", "tExit", sf::FloatRect(0, 0, 0, 0));
 
     playInterface.addTextBox("timer", "0.00", sf::Vector2f(-390, -400), 50, -1);
     playInterface.addTextBox("kills", "0", sf::Vector2f(325, -400), 50, 0); 
@@ -108,18 +111,21 @@ int main()
     playInterface.addTextBox("efficiency", " ", sf::Vector2f(325, -300), 50, 0);
     
     scoresInterface.addTextBox("title", "Highscores", sf::Vector2f(0, -300), 60, 0);
-    scoresInterface.addTextBox("1. place",  " 1.                         ", sf::Vector2f(0, -225), 50, 0);
-    scoresInterface.addTextBox("2. place",  " 2.                         ", sf::Vector2f(0, -175), 50, 0);
-    scoresInterface.addTextBox("3. place",  " 3.                         ", sf::Vector2f(0, -125), 50, 0);
-    scoresInterface.addTextBox("4. place",  " 4.                         ", sf::Vector2f(0,  -75), 50, 0);
-    scoresInterface.addTextBox("5. place",  " 5.                         ", sf::Vector2f(0,  -25), 50, 0);
-    scoresInterface.addTextBox("6. place",  " 6.                         ", sf::Vector2f(0,   25), 50, 0);
-    scoresInterface.addTextBox("7. place",  " 7.                         ", sf::Vector2f(0,   75), 50, 0);
-    scoresInterface.addTextBox("8. place",  " 8.                         ", sf::Vector2f(0,  125), 50, 0);
-    scoresInterface.addTextBox("9. place",  " 9.                         " , sf::Vector2f(0,  175), 50, 0);
-    scoresInterface.addTextBox("10. place", "10.                         ", sf::Vector2f(0,  225), 50, 0);
+    for(int i = 0; i < 10; ++i)
+    {
+	string numeral = std::to_string(i+1) + ". ";
+	if(i != 9) numeral = " " + numeral;
+	scoresInterface.addTextBox(std::to_string(i+1)          , numeral,
+				   sf::Vector2f(-250, -225 + 50*i), 50, -1);
+	scoresInterface.addTextBox(std::to_string(i+1) + "name" , "", 
+				   sf::Vector2f(-150, -225 + 50*i), 50, -1);
+	scoresInterface.addTextBox(std::to_string(i+1) + "score",  "", 
+				   sf::Vector2f(200, -225 + 50*i), 50, -1);
+    }
     scoresInterface.addTextBox("tBack", "Back", sf::Vector2f(0, 300), 60, 0);
     scoresInterface.addButton("bBack", "tBack", sf::FloatRect(0, 0, 0, 0));
+
+    pauseInterface.addTextBox("Paused", "Paused", sf::Vector2f(0, -100.f), 100, 0);
 
     sf::View actionView(sf::Vector2f(0.f, 0.f), sf::Vector2f(800, 800));
     window.setView(actionView);
@@ -139,6 +145,7 @@ int main()
     while(window.isOpen())
     {
 	sf::Event event;
+	std::pair<std::string, std::string> input;
 	
 	window.clear();
 	
@@ -169,6 +176,68 @@ int main()
 		    }
 		    break;
 	    }
+
+	    if(hasFocus)
+	    {
+		switch(currState)
+		{
+		    case GameState::Menu:
+			input = menuInterface.tick(ticksPassed,
+						   window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+						   event);
+
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+			    if(input.first == "bPlay")
+			    {
+				currState = GameState::Play;
+				playStart = -1;
+			    }
+			    else if(input.first == "bScores")
+			    {
+				currState = GameState::Scores;
+			    }
+			    else if(input.first == "bExit")
+			    {
+				window.close();
+			    }
+			}
+			break;
+		    
+		    case GameState::Play:
+			input = playInterface.tick(ticksPassed,
+						   window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+						   event);
+			break;
+		    
+		    case GameState::Scores:
+			input = scoresInterface.tick(ticksPassed,
+						     window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+						     event);
+
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+			    if(input.first == "bBack")
+			    {
+				currState = GameState::Menu;
+			    }
+			}
+
+			if(input.second != "")
+			{
+			    scores.addScore(input.second, score);
+			    vector< vector<string> > lines = scores.potenList(-1);
+			    for(int i = 0; i < 10; ++i)
+			    {
+				scoresInterface.changeTextBox(std::to_string(i+1) + "name" , lines[0][i]);
+				scoresInterface.changeTextBox(std::to_string(i+1) + "score", lines[1][i]); 
+			    }
+			    scores.save(scoreFilename);
+			}
+			break;
+		    
+		}
+	    }
 	}
 	
 	switch(currState)
@@ -177,23 +246,6 @@ int main()
 		if(hasFocus)
 		{
 		    controller.tick(false, ticksPassed);
-
-		    auto input = menuInterface.tick(ticksPassed,
-						    window.mapPixelToCoords(sf::Mouse::getPosition(window)),
-						    event);
-
-		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		    {
-			if(input.first == "bPlay")
-			{
-			    currState = GameState::Play;
-			    playStart = -1;
-			}
-			else if(input.first == "bScores")
-			{
-			    currState = GameState::Scores;
-			}
-		    }
 		}
 		
 		controller.draw(window);
@@ -215,9 +267,11 @@ int main()
 			score += 0.5f*score * (float)killCount/(float)shotCount;
 			lastScore = score;
 			controller.killStation();
-			if(scores.isScoreSignificant(score) >= 0)
+			if(scores.potenPlace(score) >= 0)
 			{
 			    currState = GameState::Scores;
+			    killCount = 0;
+			    shotCount = 0;
 			    newScore = true;
 			}
 			else currState = GameState::Menu;
@@ -251,29 +305,26 @@ int main()
 		controller.draw(window);
 		crosshair.draw(window);
 		playInterface.draw(window);
+		if(!hasFocus) pauseInterface.draw(window);
 		break;
 		
 	    case GameState::Scores:
 		if(newScore)
 		{
+		    int place = scores.potenPlace(score);
+		    vector< vector<string> > lines = scores.potenList(score);
+		    for(int i = 0; i < lines[1].size(); ++i)
+		    {
+			scoresInterface.changeTextBox(std::to_string(i+1) + "name" , lines[0][i]);
+			scoresInterface.changeTextBox(std::to_string(i+1) + "score", lines[1][i]); 
+		    }
+		    scoresInterface.addInputBox("newScore", std::to_string(place+1) + "name");
 		    newScore = false;
 		}
 		
 		if(hasFocus)
 		{
 		    controller.tick(false, ticksPassed);
-
-		    auto input = scoresInterface.tick(ticksPassed,
-						      window.mapPixelToCoords(sf::Mouse::getPosition(window)),
-						      event);
-
-		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		    {
-			if(input.first == "bBack")
-			{
-			    currState = GameState::Menu;
-			}
-		    }
 		}
 		
 		controller.draw(window);

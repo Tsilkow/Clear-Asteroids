@@ -18,7 +18,9 @@ class Scores
 
     bool save(std::string filename);
 
-    int isScoreSignificant(int score);
+    int potenPlace(int score);
+    
+    std::vector< std::vector<std::string> > potenList(int newScore = -1);
     
     bool addScore(std::string name, int score);
 

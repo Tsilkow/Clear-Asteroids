@@ -55,7 +55,7 @@ bool Scores::save(std::string filename)
 	parse["scores"][i][1] = m_scores[i].second;
     }
     
-    std::cout << std::setw(4) << parse << std::endl;
+    //std::cout << std::setw(4) << parse << std::endl;
 
     file << parse;
     file.close();
@@ -63,7 +63,7 @@ bool Scores::save(std::string filename)
     return true;
 }
 
-int Scores::isScoreSignificant(int score)
+int Scores::potenPlace(int score)
 {
     int result = -1;
     bool scoreFound = false;
@@ -82,26 +82,35 @@ int Scores::isScoreSignificant(int score)
     return result;
 }
 
+std::vector< std::vector<std::string> > Scores::potenList(int newScore)
+{
+    std::vector< std::vector<std::string> > result (2, std::vector<std::string>(m_scoresKept, ""));
+    result.emplace_back(std::vector<std::string>());
+    result.emplace_back(std::vector<std::string>());
+    int newPlacement = potenPlace(newScore);
+
+    for(int i = 0; i < m_scores.size(); ++i)
+    {
+	result[0][i] = m_scores[i].first;
+	result[1][i] = std::to_string(m_scores[i].second);
+    }
+
+    if(newScore != -1 && newPlacement >= 0)
+    {
+	result[0].insert(result[0].begin() + newPlacement, "");
+	result[1].insert(result[1].begin() + newPlacement, std::to_string(newScore));
+        result[0].pop_back();
+        result[1].pop_back();
+    }
+
+    return result;
+}
+
 bool Scores::addScore(std::string name, int score)
 {
-    if(isScoreSignificant(score))
-    {
-	bool scoreAdded = false;
-	
-	for(int i = 0; i < m_scores.size(); ++i)
-	{
-	    if(score > m_scores[i].second)
-	    {
-		m_scores.insert(m_scores.begin() + i, std::pair<std::string, int>(name, score));
-		scoreAdded = true;
-	    }
-	    if(scoreAdded) break;
-	}
-	if(!scoreAdded) m_scores.emplace_back(name, score);
+    m_scores.insert(m_scores.begin() + potenPlace(score), std::pair<std::string, int>(name, score));
+    
+    while(m_scores.size() > m_scoresKept) m_scores.pop_back();
 
-	while(m_scores.size() > m_scoresKept) m_scores.pop_back();
-	
-	return true;
-    }
-    return false;
+    return true;
 }

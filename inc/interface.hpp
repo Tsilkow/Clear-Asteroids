@@ -59,7 +59,7 @@ class InputBox
     public:
     InputBox(sf::Text text, int blinkFreq);
 
-    std::string tick(int ticksPassed, sf::Event event);
+    std::string tick(int ticksPassed, sf::Event& event);
 
     void draw(sf::RenderTarget& target);
 
@@ -95,7 +95,7 @@ class Interface
     
     bool delInputBox(std::string key);
 
-    std::pair<std::string, std::string> tick(int ticksPassed, sf::Vector2f mouse, sf::Event event);
+    std::pair<std::string, std::string> tick(int ticksPassed, sf::Vector2f mouse, sf::Event& event);
 
     void draw(sf::RenderTarget& target);
 };

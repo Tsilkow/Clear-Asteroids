@@ -76,12 +76,12 @@ InputBox::InputBox(sf::Text text, int blinkFreq):
     m_text.setString("");
 }
 
-std::string InputBox::tick(int ticksPassed, sf::Event event)
+std::string InputBox::tick(int ticksPassed, sf::Event& event)
 {
     if(event.type == sf::Event::TextEntered)
     {
 	if(event.text.unicode == '\b' && m_input.size() > 0) m_input.erase(m_input.size() - 1, 1);
-	else if(event.text.unicode >= 32 && event.text.unicode < 128 && m_input.size() <= 16)
+	else if(event.text.unicode >= 32 && event.text.unicode < 128 && m_input.size() <= 13)
 	{
 	    m_input += static_cast<char>(event.text.unicode);
 	}
@@ -188,7 +188,7 @@ bool Interface::addInputBox(std::string key, std::string textKey)
     if(found != m_textBoxes.end())
     {
 	m_inputBoxes.insert({key, InputBox(found->second.getText(), 60)});
-	m_textBoxes.erase(found);
+	//m_textBoxes.erase(found);
 	
 	return true;
     }
@@ -207,9 +207,10 @@ bool Interface::delInputBox(std::string key)
     return false;
 }
 		     
-std::pair<std::string, std::string> Interface::tick(int ticksPassed, sf::Vector2f mouse, sf::Event event)
+std::pair<std::string, std::string> Interface::tick(int ticksPassed, sf::Vector2f mouse, sf::Event& event)
 {
     std::pair<std::string, std::string> result;
+    std::vector< std::map<std::string, InputBox>::iterator > toRemove;
     
     for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it)
     {
@@ -219,7 +220,14 @@ std::pair<std::string, std::string> Interface::tick(int ticksPassed, sf::Vector2
     for(auto it = m_inputBoxes.begin(); it != m_inputBoxes.end(); ++it)
     {
 	result.second = it->second.tick(ticksPassed, event);
+	if(result.second != "") toRemove.emplace_back(it);
     }
+
+    for(auto it = toRemove.begin(); it != toRemove.end(); ++it)
+    {
+	m_inputBoxes.erase(*it);
+    }
+    
     return result;
 }
 
