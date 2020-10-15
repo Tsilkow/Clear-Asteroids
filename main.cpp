@@ -104,6 +104,7 @@ int main()
     menuInterface.addButton("bScores", "tScores", sf::FloatRect(0, 0, 0, 0));
     menuInterface.addTextBox("tExit", "Exit", sf::Vector2f(0,  150), 60, 0);
     menuInterface.addButton("bExit", "tExit", sf::FloatRect(0, 0, 0, 0));
+    menuInterface.addTextBox("LastScore", "Last score = 0", sf::Vector2f(-400,  365), 30, -1);
 
     playInterface.addTextBox("timer", "0.00", sf::Vector2f(-390, -400), 50, -1);
     playInterface.addTextBox("kills", "0", sf::Vector2f(325, -400), 50, 0); 
@@ -269,6 +270,7 @@ int main()
 			killCount = 0;
 			shotCount = 0;
 			lastScore = score;
+			menuInterface.changeTextBox("LastScore", "Last Score = " + to_string(lastScore));
 			controller.killStation();
 			if(scores.potenPlace(score) >= 0)
 			{
