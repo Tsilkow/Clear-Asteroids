@@ -34,8 +34,8 @@ int main()
 
     ControllerSettings cSetts =
     {
-	{4.f, 8.f},          // m_velocityRange
-	{1000, 10000},       // m_massRange
+	{2.f, 12.f},          // m_velocityRange
+	{5000, 10000},       // m_massRange
 	{-M_PI/60, M_PI/60}, // m_angVelocityRange
 	{0.5f, 0.8f},        // m_colorLightRange
 	800,                 // m_areaWidth
@@ -43,7 +43,7 @@ int main()
 	50,                  // m_buffer
 	2,                   // m_targetting
 	60,                  // m_startAPM - starting value ofasteroids per minute
-	60,                  // m_APMincrease - APM increase per minute
+	120,                 // m_APMincrease - APM increase per minute
 	0.5f                 // m_bounce
     };
 
@@ -266,7 +266,7 @@ int main()
 		    score = ticksPassed - playStart;
 		    if(!controller.tick(true, ticksPassed))
 		    {
-			score += 0.5f*score * (float)killCount/(float)shotCount;
+			if(shotCount != 0) score += 0.5f*score * (float)killCount/(float)shotCount;
 			killCount = 0;
 			shotCount = 0;
 			lastScore = score;
