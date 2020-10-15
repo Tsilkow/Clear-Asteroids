@@ -8,8 +8,8 @@
 cd build/
 cmake ..
 if eval cmake --build .; then
+    ./ClearAsteroids
     cd ..
-    ./build/ClearAsteroids
 else
     cd ..
 fi

@@ -135,6 +135,7 @@ int main()
     bool hasFocus = true;
     bool start = true;
     bool newScore = false;
+    bool firstTimeInScores = true;
     int ticksPassed = 0;
     int playStart = -1;
     int shotCount = 0;
@@ -265,13 +266,13 @@ int main()
 		    if(!controller.tick(true, ticksPassed))
 		    {
 			score += 0.5f*score * (float)killCount/(float)shotCount;
+			killCount = 0;
+			shotCount = 0;
 			lastScore = score;
 			controller.killStation();
 			if(scores.potenPlace(score) >= 0)
 			{
 			    currState = GameState::Scores;
-			    killCount = 0;
-			    shotCount = 0;
 			    newScore = true;
 			}
 			else currState = GameState::Menu;
@@ -291,7 +292,8 @@ int main()
 								   (float)shotCount, 1) + "%");
 		    }
 
-		    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
+		    if(ticksPassed - playStart > 10 &&
+		       sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
 		       crosshair.shoot(ticksPassed))
 		    {
 			++shotCount;
@@ -309,17 +311,20 @@ int main()
 		break;
 		
 	    case GameState::Scores:
-		if(newScore)
+		int place = scores.potenPlace(score);
+		if(newScore || firstTimeInScores)
 		{
-		    int place = scores.potenPlace(score);
-		    vector< vector<string> > lines = scores.potenList(score);
+		    vector< vector<string> > lines = scores.potenList(-1 + (score+1) * newScore);
+		
 		    for(int i = 0; i < lines[1].size(); ++i)
 		    {
 			scoresInterface.changeTextBox(std::to_string(i+1) + "name" , lines[0][i]);
 			scoresInterface.changeTextBox(std::to_string(i+1) + "score", lines[1][i]); 
 		    }
-		    scoresInterface.addInputBox("newScore", std::to_string(place+1) + "name");
+		    
+		    if(newScore) scoresInterface.addInputBox("newScore", std::to_string(place+1) + "name");
 		    newScore = false;
+		    firstTimeInScores = false;
 		}
 		
 		if(hasFocus)
