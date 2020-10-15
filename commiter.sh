@@ -9,5 +9,6 @@ git add commiter.sh
 git add .gitignore
 git add Sicretmono.ttf
 git add station.png
+git add README.md
 
 git commit
