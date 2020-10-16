@@ -87,7 +87,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "Clear Asteroids");
     window.setFramerateLimit(60);
-
+    
     Controller controller(shr_aSetts, shr_cSetts, shr_sSetts);
     Crosshair crosshair(shr_crSetts);
     Interface menuInterface(shr_font, sf::Vector2f(800, 800), sf::Color(0, 0, 0, 192));
@@ -134,7 +134,6 @@ int main()
     enum GameState{Menu, Play, Scores};
     GameState currState = GameState::Menu;
     bool hasFocus = true;
-    bool start = true;
     bool newScore = false;
     bool firstTimeInScores = true;
     int ticksPassed = 0;
@@ -270,6 +269,7 @@ int main()
 			killCount = 0;
 			shotCount = 0;
 			lastScore = score;
+			controller.reset();
 			menuInterface.changeTextBox("LastScore", "Last Score = " + to_string(lastScore));
 			controller.killStation();
 			if(scores.potenPlace(score) >= 0)

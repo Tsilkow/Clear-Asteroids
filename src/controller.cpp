@@ -5,14 +5,15 @@
 
 
 
-Controller::Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts,
-		       std::shared_ptr<StationSettings> sSetts):
+Controller::Controller(std::shared_ptr<AsteroidSettings>& aSetts, std::shared_ptr<ControllerSettings>& cSetts,
+		       std::shared_ptr<StationSettings>& sSetts):
     m_aSetts(aSetts),
     m_cSetts(cSetts),
     m_sSetts(sSetts),
-    m_lastAstCreated(0),
-    m_APM((float)cSetts->m_startAPM)
+    m_lastAstCreated(0)
 {
+    m_APM = (float)m_cSetts->m_startAPM;
+    
     m_bounds = sf::FloatRect(-(m_cSetts->m_areaWidth /2 +   m_cSetts->m_buffer),
 			     -(m_cSetts->m_areaHeight/2 +   m_cSetts->m_buffer),
 			       m_cSetts->m_areaWidth    + 2*m_cSetts->m_buffer,
@@ -164,8 +165,14 @@ int Controller::destroyAt(sf::Vector2f target)
 }
 
 void Controller::start()
-{    
+{
     m_station = std::make_shared<Station>(m_sSetts);
+    reset();
+}
+
+void Controller::reset()
+{
+    m_APM = (float)m_cSetts->m_startAPM;
 }
 
 void Controller::killStation()

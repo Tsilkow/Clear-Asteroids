@@ -6,7 +6,7 @@
 #cp station.png build/station.png
 #cp scores.json build/scores.json
 cd build/
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 if eval cmake --build .; then
     ./ClearAsteroids
     cd ..

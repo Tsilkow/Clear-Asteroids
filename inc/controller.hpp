@@ -39,8 +39,8 @@ class Controller
     void createAsteroid();
     
     public:
-    Controller(std::shared_ptr<AsteroidSettings> aSetts, std::shared_ptr<ControllerSettings> cSetts,
-	       std::shared_ptr<StationSettings> sSetts);
+    Controller(std::shared_ptr<AsteroidSettings>& aSetts, std::shared_ptr<ControllerSettings>& cSetts,
+	       std::shared_ptr<StationSettings>& sSetts);
 
     bool tick(bool acion, int ticksPassed);
 
@@ -49,6 +49,8 @@ class Controller
     int destroyAt(sf::Vector2f target);
 
     void start();
+
+    void reset();
 
     void killStation();
     

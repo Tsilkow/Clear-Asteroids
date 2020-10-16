@@ -13,4 +13,5 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 add_library(Modules SHARED ${SOURCES})
 
 add_executable(ClearAsteroids main.cpp)
+target_compile_options(ClearAsteroids PRIVATE -Wall)
 target_link_libraries(ClearAsteroids sfml-graphics sfml-audio Modules)
